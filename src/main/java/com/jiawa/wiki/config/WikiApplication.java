@@ -1,16 +1,17 @@
-package com.example.wiki;
+package com.jiawa.wiki.config;
 
-import org.apache.juli.logging.LogFactory;
+import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 
-@SpringBootApplication(exclude= {DataSourceAutoConfiguration.class})
+
+@SpringBootApplication
 @ComponentScan({"com.*"})
+@MapperScan("com.jiawa.wiki.mapper")
 public class WikiApplication {
 
     private static  final  Logger LOG  = LoggerFactory.getLogger(WikiApplication.class);
