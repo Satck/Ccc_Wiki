@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
 
     // 读取properties中的自定义配置 test.hello 并且将他赋值给test，如果没有读取到properties中的属性 就默认为 冒号后面的 （优先读取properties中的选项）；
-    @Value("${test.hello：TEST}")
+    @Value("${test.hello:TEST}")
     private  String test ;
 
     /**
@@ -23,7 +23,7 @@ public class TestController {
     // 如果要制定某种方式的话 eg get请求 那么就用GetMapping（）
     // PostMapping 不可以使用浏览器来测试
     public String hello(){
-        return "Hello World";
+        return "Hello World" +test;
     }
 
     @PostMapping("/hello/post")
