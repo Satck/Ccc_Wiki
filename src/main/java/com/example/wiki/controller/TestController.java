@@ -1,5 +1,6 @@
 package com.example.wiki.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -7,6 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class TestController {
+
+    // 读取properties中的自定义配置 test.hello 并且将他赋值给test，如果没有读取到properties中的属性 就默认为 冒号后面的 （优先读取properties中的选项）；
+    @Value("${test.hello：TEST}")
+    private  String test ;
 
     /**
      * 常见的请求方式 GET PUT POST DELETE
