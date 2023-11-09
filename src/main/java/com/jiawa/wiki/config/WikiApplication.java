@@ -10,10 +10,9 @@ import org.springframework.core.env.Environment;
 
 
 @SpringBootApplication
-@ComponentScan({"com.*"})
+@ComponentScan({"com.jiawa"})
 @MapperScan("com.jiawa.wiki.mapper")
 public class WikiApplication {
-
     private static  final  Logger LOG  = LoggerFactory.getLogger(WikiApplication.class);
     public static void main(String[] args) {
 //         启动日志优化

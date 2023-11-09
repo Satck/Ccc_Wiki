@@ -1,7 +1,6 @@
-package com.jiawa.wiki.domain;
-/// 用于与数据库对应
+package com.jiawa.wiki.resp;
 
-public class Ebook {
+public class EbookResp {
     private Long id;
 
     private String name;
