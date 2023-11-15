@@ -1,5 +1,5 @@
 <template>
-<!--  <a-layout-content style="padding: 0 50px">-->
+  <a-layout-content style="padding: 0 50px">
     <a-layout style="padding: 24px 0; background: #fff">
       <a-layout-sider width="200" style="background: #fff">
         <a-menu
@@ -45,8 +45,7 @@
         </a-menu>
       </a-layout-sider>
       <a-layout-content :style="{ background:'#fff',padding: '24px',margin:'0',minHeight:'280px'}">
-        <a-list item-layout="vertical" size="large"  :grid ="{gutter:20,column:3}"
-             :data-source="ebooks">
+        <a-list item-layout="vertical" size="large" :grid="{ gutter: 20, column: 3 }" :data-source="ebooks">
           <template #renderItem="{ item }">
             <a-list-item key="item.name">
               <template #actions>
@@ -66,11 +65,12 @@
         </a-list>
       </a-layout-content>
     </a-layout>
-<!--  </a-layout-content>-->
+  </a-layout-content>
 </template>
 
-<script lang="ts" setup>
-import { StarOutlined, LikeOutlined, MessageOutlined } from '@ant-design/icons-vue';
+<script lang="ts" >
+import axios from 'axios'
+import {defineComponent, reactive, ref,onMounted,toRef} from "vue";
 const listData: Record<string, string>[] = [];
 for (let i = 0; i < 23; i++) {
   listData.push({
@@ -83,15 +83,47 @@ for (let i = 0; i < 23; i++) {
         'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
   });
 }
-const pagination = {
-  onChange: (page: number) => {
-    console.log(page);
-  },
-  pageSize: 3,
-};
-const actions: Record<string, any>[] = [
-  { icon: StarOutlined, text: '156' },
-  { icon: LikeOutlined, text: '156' },
-  { icon: MessageOutlined, text: '2' },
-];
+export default  defineComponent({
+  name: 'Home',
+  setup(){
+    console.log("setup");
+    const ebooks = ref()
+    // reactive里面一般要放
+    const ebooks1 = reactive({books:[]});
+    onMounted(()=>{
+      console.log("onMounted")
+      axios.get("http://127.0.0.1:8880/ebook/list").then((response)=>{
+        const data = response.data;
+        ebooks.value = data.content;
+        ebooks1.books = data.content;
+        console.log(response);
+      })
+    });
+
+    return {
+      ebooks,
+      ebooks2:toRef(ebooks1,"books"),
+          pagination: {
+            onChange: (page: any) => {
+              console.log(page);
+            },
+                pageSize: 3,
+          },
+      actions: [
+        { type: 'StarOutlined', text: '156' },
+        { type: 'LikeOutlined', text: '156' },
+        { type: 'MessageOutlined', text: '2' },
+      ],
+    }
+  }
+});
 </script>
+<style scoped>
+.ant-avatar {
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  border-radius: 8%;
+  margin: 5px 0;
+}
+</style>

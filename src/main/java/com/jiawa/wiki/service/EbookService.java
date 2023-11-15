@@ -9,6 +9,7 @@ import com.jiawa.wiki.resp.EbookResp;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +24,10 @@ public class    EbookService {
         EbookExample ebookExample = new EbookExample();
         //相当于是where条件
         EbookExample.Criteria criteria = ebookExample.createCriteria();
-        // 模糊查询
+        // 动态sql
+        if(!ObjectUtils.isEmpty(req.getName())){
         criteria.andNameLike("%" + req.getName() + "%");
+        }
         // 持久层返回List<Ebook> 需要转成List<EbookResp> 再返回给controller
         List<Ebook> ebookList = ebookMapper.selectByExample(ebookExample);
         List<EbookResp> respList = new ArrayList<>();
