@@ -45,39 +45,66 @@
         </a-menu>
       </a-layout-sider>
       <a-layout-content :style="{ background:'#fff',padding: '24px',margin:'0',minHeight:'280px'}">
-        <pre>
-          {{ebooks}}
-          {{ebooks2}}
-        </pre>
+        <a-list item-layout="vertical" size="large" :pagination="pagination" :data-source="listData">
+          <template #footer>
+            <div>
+              <b>ant design vue</b>
+              footer part
+            </div>
+          </template>
+          <template #renderItem="{ item }">
+            <a-list-item key="item.title">
+              <template #actions>
+          <span v-for="{ icon, text } in actions" :key="icon">
+            <component :is="icon" style="margin-right: 8px" />
+            {{ text }}
+          </span>
+              </template>
+              <template #extra>
+                <img
+                    width="272"
+                    alt="logo"
+                    src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
+                />
+              </template>
+              <a-list-item-meta :description="item.description">
+                <template #title>
+                  <a :href="item.href">{{ item.title }}</a>
+                </template>
+                <template #avatar><a-avatar :src="item.avatar" /></template>
+              </a-list-item-meta>
+              {{ item.content }}
+            </a-list-item>
+          </template>
+        </a-list>
       </a-layout-content>
     </a-layout>
   </a-layout-content>
 </template>
 
-<script lang="ts">
-import { defineComponent,onMounted,ref,reactive,toRef} from 'vue';
-import axios from 'axios'
-export default defineComponent({
-  name: 'Home',
-  setup(){
-    console.log("setup");
-    const ebooks = ref()
-    // reactive里面一般要放
-    const ebooks1 = reactive({books:[]});
-    onMounted(()=>{
-      console.log("onMounted")
-      axios.get("http://127.0.0.1:8880/ebook/list?name=Spring").then((response)=>{
-        const data = response.data;
-        ebooks.value = data.content;
-        ebooks1.books = data.content;
-        console.log(response);
-      })
-    });
-
-    return {
-      ebooks,
-      ebooks2:toRef(ebooks1,"books")
-    }
-  }
-});
+<script lang="ts" setup>
+import { StarOutlined, LikeOutlined, MessageOutlined } from '@ant-design/icons-vue';
+const listData: Record<string, string>[] = [];
+for (let i = 0; i < 23; i++) {
+  listData.push({
+    href: 'https://www.antdv.com/',
+    title: `ant design vue part ${i}`,
+    avatar: 'https://joeschmoe.io/api/v1/random',
+    description:
+        'Ant Design, a design language for background applications, is refined by Ant UED Team.',
+    content:
+        'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
+  });
+}
+const pagination = {
+  onChange: (page: number) => {
+    console.log(page);
+  },
+  pageSize: 3,
+};
+const actions: Record<string, any>[] = [
+  { icon: StarOutlined, text: '156' },
+  { icon: LikeOutlined, text: '156' },
+  { icon: MessageOutlined, text: '2' },
+];
 </script>

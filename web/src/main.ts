@@ -6,4 +6,12 @@ import  Antd from 'ant-design-vue'
 import  'ant-design-vue/dist/antd.css'
 //需要哪些组件 就可以在这个里面进行使用
 
-createApp(App).use(store).use(router).use(Antd).mount('#app')
+import * as Icons from '@ant-design/icons-vue'
+const app = createApp(App);
+app.use(store).use(router).use(Antd).mount('#app');
+
+
+const icons :any= Icons ;
+for (const i in icons){
+    app.component(i,icons[i]);
+}
