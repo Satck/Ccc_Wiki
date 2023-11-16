@@ -1,4 +1,5 @@
 <template>
+  <a-layout>
   <a-layout-content style="padding: 0 50px">
     <a-layout style="padding: 24px 0; background: #fff">
       <a-layout-sider width="200" style="background: #fff">
@@ -44,28 +45,29 @@
           </a-sub-menu>
         </a-menu>
       </a-layout-sider>
-      <a-layout-content :style="{ background:'#fff',padding: '24px',margin:'0',minHeight:'280px'}">
-        <a-list item-layout="vertical" size="large" :grid="{ gutter: 20, column: 3 }" :data-source="ebooks">
-          <template #renderItem="{ item }">
-            <a-list-item key="item.name">
-              <template #actions>
+    </a-layout>
+  </a-layout-content>
+  <a-layout-content :style="{ background:'#fff',padding: '24px',margin:'0',minHeight:'280px'}">
+    <a-list item-layout="vertical" size="large" :grid="{ gutter: 20, column: 3 }" :data-source="ebooks">
+      <template #renderItem="{ item }">
+        <a-list-item key="item.name">
+          <template #actions>
                   <span v-for="{ icon, text } in actions" :key="icon">
                     <component :is="icon" style="margin-right: 8px" />
                     {{ text }}
                   </span>
-              </template>
-              <a-list-item-meta :description="item.description">
-                <template #title>
-                  <a :href="item.href">{{ item.name }}</a>
-                </template>
-                <template #avatar><a-avatar :src="item.cover" /></template>
-              </a-list-item-meta>
-            </a-list-item>
           </template>
-        </a-list>
-      </a-layout-content>
-    </a-layout>
+          <a-list-item-meta :description="item.description">
+            <template #title>
+              <a :href="item.href">{{ item.name }}</a>
+            </template>
+            <template #avatar><a-avatar :src="item.cover" /></template>
+          </a-list-item-meta>
+        </a-list-item>
+      </template>
+    </a-list>
   </a-layout-content>
+  </a-layout>
 </template>
 
 <script lang="ts" >
