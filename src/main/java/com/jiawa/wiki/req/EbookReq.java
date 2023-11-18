@@ -2,7 +2,7 @@ package com.jiawa.wiki.req;
 
 
 // 用于请求参数的封装
-public class EbookReq {
+public class EbookReq extends PageReq{
     private Long id;
 
     private String name;
@@ -23,4 +23,11 @@ public class EbookReq {
         this.name = name;
     }
 
+    @Override
+    public String toString() {
+        return "EbookReq{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
