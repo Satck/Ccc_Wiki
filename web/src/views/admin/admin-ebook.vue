@@ -14,7 +14,7 @@
         </template>
         <template v-slot:action="{ text, record }">
           <a-space size="small">
-          <a-button type="primary" >
+          <a-button type="primary" @click="edit">
             编辑
           </a-button>
             <a-button type="primary" >
@@ -25,6 +25,13 @@
       </a-table>
     </a-layout-content>
   </a-layout>
+  <a-modal
+      v-model:visible = "modalVisible"
+      title="电子书表单"
+      :confirm-loading="modalVisible"
+      @ok="handleModalOk">
+    <p>text</p>
+  </a-modal>
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue';
@@ -101,6 +108,21 @@ export default defineComponent({
         size: pagination.pageSize
       });
     };
+      //--------表单------------
+    const modalVisible = ref(false);
+    const modalLoading = ref(false);
+    const handleModalOk = () => {
+      setTimeout(()=>{
+        modalVisible.value = false ;
+        modalLoading.value = false ;
+      },2000)
+    }
+    /**
+     * 编辑
+     */
+    const edit = () => {
+      modalVisible.value = true ;
+    };
     onMounted(() => {
       handleQuery({
       });
@@ -111,11 +133,13 @@ export default defineComponent({
       columns,
       loading,
       handleTableChange,
+
+      edit,
+      modalVisible,
+      modalLoading,
+      handleModalOk,
     }
-
-
   }
 })
-
 
 </script>
