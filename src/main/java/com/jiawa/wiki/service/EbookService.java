@@ -41,8 +41,8 @@ public class    EbookService {
         List<Ebook> ebookList = ebookMapper.selectByExample(ebookExample);
 
         PageInfo<Ebook> pageInfo = new PageInfo<>(ebookList);
-        LOG.info("总行数：",pageInfo.getTotal());
-        LOG.info("总页数：",pageInfo.getPages());
+        LOG.info("总行数：{ }",pageInfo.getTotal());
+        LOG.info("总页数：{ }",pageInfo.getPages());
 //        List<EbookResp> respList = new ArrayList<>();
 ////        将 ebookList中的实体转换倒EbookResp当中 再将EbookResp当中的实体转换到 List<EbookResp> 当中
 //        for(Ebook ebook : ebookList){
