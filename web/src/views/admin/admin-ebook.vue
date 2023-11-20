@@ -26,25 +26,27 @@
     </a-layout-content>
   </a-layout>
   <a-modal
-      v-model:visible = "modalVisible"
       title="电子书表单"
-      :confirm-loading="modalVisible"
-      @ok="handleModalOk">
-    <a-form :model="ebook" :label-col="{ span: 6 }" >
+      v-model:visible="modalVisible"
+      :confirm-loading="modalLoading"
+      @ok="handleModalOk"
+  >
+    <a-form :model="ebook" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
       <a-form-item label="封面">
         <a-input v-model:value="ebook.cover" />
       </a-form-item>
       <a-form-item label="名称">
         <a-input v-model:value="ebook.name" />
       </a-form-item>
-      <a-form-item label="分类一">
-        <a-input v-model:value = "ebook.category1Id"/>
+      <a-form-item label="分类1">
+        <a-input v-model:value="ebook.category1_id" />
       </a-form-item>
-      <a-form-item label="分类二">
-        <a-input v-model:value = "ebook.category2Id"/>
+      <a-form-item label="分类2">
+        <a-input v-model:value="ebook.category1_id" />
       </a-form-item>
+
       <a-form-item label="描述">
-        <a-input v-model:value="ebook.desc" type="textarea" />
+        <a-input v-model:value="ebook.description" type="textarea" />
       </a-form-item>
     </a-form>
   </a-modal>
@@ -58,7 +60,7 @@ export default defineComponent({
   const ebooks = ref();
   const pagination = ref({
     current : 1,
-    pageSize : 4 ,
+    pageSize : 10,
     total :0 ,
 
   });
@@ -125,15 +127,24 @@ export default defineComponent({
       });
     };
       //--------表单------------
-    const ebook = ref({});
+    const ebook = ref();
     const modalVisible = ref(false);
     const modalLoading = ref(false);
     const handleModalOk = () => {
-      setTimeout(()=>{
-        modalVisible.value = false ;
-        modalLoading.value = false ;
-      },2000)
-    }
+      modalLoading.value = true ;
+      axios.post("/ebook/save", ebook.value).then((response) => {
+        const data = response.data; // data=commonResp
+        if(data.success) {
+          modalVisible.value = false;
+          modalLoading.value = false;
+          // 重新加载列表
+          handleQuery({
+            page: pagination.value.current, // 刷新为当前页面的页码
+            size: pagination.value.pageSize,
+          });
+        }
+      });
+    };
     /**
      * 编辑
      */
