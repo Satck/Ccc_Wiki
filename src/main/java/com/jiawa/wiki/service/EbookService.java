@@ -11,6 +11,7 @@ import com.jiawa.wiki.req.EbookSaveReq;
 import com.jiawa.wiki.resp.EbookQueryResp;
 import com.jiawa.wiki.resp.PageResp;
 import com.jiawa.wiki.util.CopyUtil;
+import com.jiawa.wiki.util.SnowFlake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,11 @@ public class    EbookService {
 
     @Autowired
     private EbookMapper ebookMapper;
+
+
+
+    @Autowired
+    private SnowFlake snowFlake;
 
     private static final Logger LOG = LoggerFactory.getLogger(EbookService.class);
 
@@ -67,6 +73,9 @@ public class    EbookService {
         // 根据id判断是新增还是更新
         if(ObjectUtils.isEmpty(req.getId())){
             // 新增
+
+            // 生成id  id的算法 一种最简单的自增 还有一种是uuid  再就是雪花算法
+            ebook.setId(snowFlake.nextId());
             ebookMapper.insert(ebook);
         }else{
             // 更新
