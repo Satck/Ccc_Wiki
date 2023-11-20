@@ -30,7 +30,7 @@ public class EbookController {
     // 这个注解对应的就是axios 的 json方式的（POST）提交   用json方式的提交后端需要用RequestBody来读取
     // 如果是使用form表单的形式去提交的话 就不需要用RequestBody
     @PostMapping("/save")
-    public CommonResp save(@RequestBody EbookSaveReq req) {
+    public CommonResp save(@Valid @RequestBody EbookSaveReq req) {
         CommonResp resp = new CommonResp<>();
         ebookService.save(req);
         return resp;
