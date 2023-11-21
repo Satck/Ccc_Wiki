@@ -33,29 +33,13 @@ public class CategoryService {
 
     private static final Logger LOG = LoggerFactory.getLogger(CategoryService.class);
 
-    public PageResp<CategoryQueryResp> list(CategoryQueryReq req){
+    public List<CategoryQueryResp> all(){
         CategoryExample categoryExample = new CategoryExample();
-        //相当于是where条件
-        CategoryExample.Criteria criteria = categoryExample.createCriteria();
-        PageHelper.startPage(req.getPage(),req.getSize());
-        // 持久层返回List<Category> 需要转成List<CategoryResp> 再返回给controller
+        categoryExample.setOrderByClause("sort asc");
         List<Category> categoryList = categoryMapper.selectByExample(categoryExample);
 
-        PageInfo<Category> pageInfo = new PageInfo<>(categoryList);
-        LOG.info("总行数：{ }",pageInfo.getTotal());
-        LOG.info("总页数：{ }",pageInfo.getPages());
-//        List<CategoryResp> respList = new ArrayList<>();
-////        将 categoryList中的实体转换倒CategoryResp当中 再将CategoryResp当中的实体转换到 List<CategoryResp> 当中
-//        for(Category category : categoryList){
-//            CategoryResp  categoryResp = new CategoryResp();
-//            BeanUtils.copyProperties(category,categoryResp);
-//            respList.add(categoryResp);
-//        }
         List<CategoryQueryResp> list = CopyUtil.copyList(categoryList, CategoryQueryResp.class);
-        PageResp<CategoryQueryResp> pageResp = new PageResp();
-        pageResp.setTotal(pageInfo.getTotal());
-        pageResp.setList(list);
-        return   pageResp;
+        return   list;
     }
 
     /**
@@ -85,5 +69,32 @@ public class CategoryService {
 
     public void delete(Long id){
         categoryMapper.deleteByPrimaryKey(id);
+    }
+
+    public PageResp<CategoryQueryResp> list(CategoryQueryReq req){
+        CategoryExample categoryExample = new CategoryExample();
+        //相当于是where条件
+        CategoryExample.Criteria criteria = categoryExample.createCriteria();
+        categoryExample.setOrderByClause("sort asc");
+
+        PageHelper.startPage(req.getPage(),req.getSize());
+        // 持久层返回List<Category> 需要转成List<CategoryResp> 再返回给controller
+        List<Category> categoryList = categoryMapper.selectByExample(categoryExample);
+
+        PageInfo<Category> pageInfo = new PageInfo<>(categoryList);
+        LOG.info("总行数：{ }",pageInfo.getTotal());
+        LOG.info("总页数：{ }",pageInfo.getPages());
+//        List<CategoryResp> respList = new ArrayList<>();
+////        将 categoryList中的实体转换倒CategoryResp当中 再将CategoryResp当中的实体转换到 List<CategoryResp> 当中
+//        for(Category category : categoryList){
+//            CategoryResp  categoryResp = new CategoryResp();
+//            BeanUtils.copyProperties(category,categoryResp);
+//            respList.add(categoryResp);
+//        }
+        List<CategoryQueryResp> list = CopyUtil.copyList(categoryList, CategoryQueryResp.class);
+        PageResp<CategoryQueryResp> pageResp = new PageResp();
+        pageResp.setTotal(pageInfo.getTotal());
+        pageResp.setList(list);
+        return   pageResp;
     }
 }
