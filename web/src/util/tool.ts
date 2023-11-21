@@ -7,7 +7,7 @@ export class Tool {
             return !obj || obj.replace(/\s+/g, "") === ""
         } else {
             return (!obj || JSON.stringify(obj) === "{}" || obj.length === 0);
-        }
+        }0
     }
 
     /**
