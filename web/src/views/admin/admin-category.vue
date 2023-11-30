@@ -42,7 +42,7 @@
             </a-popconfirm>
           </a-space>
         </template>
-      </a-table>
+      </a-table>0
     </a-layout-content>
   </a-layout>
   <a-modal
@@ -52,11 +52,19 @@
       @ok="handleModalOk"
   >
     <a-form :model="category" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
-      <a-form-item label="封面">
-        <a-input v-model:value="category.cover" />
+      <a-form-item label="名称">
+        <a-input v-model:value="category.name" />
       </a-form-item>
       <a-form-item label="父分类">
-        <a-input v-model:value="category.parent" />
+        <a-select
+          v-model:value = "category.parent"
+          ref = "select"
+        >
+          <a-select-option value = "0"> 无</a-select-option>
+          <a-select-option v-for="c in level1" :key = "c.id" :value ="c.id" :disabled="category.id===c.id">
+            {{c.name}}
+          </a-select-option>
+        </a-select>
       </a-form-item>
       <a-form-item label="顺序">
         <a-input v-model:value="category.sort" />
@@ -180,6 +188,7 @@ export default defineComponent({
       });
     };
 
+
     onMounted(() => {
       handleQuery();
     });
@@ -188,6 +197,8 @@ export default defineComponent({
       level1,
       columns,
       loading,
+
+
 
       edit,
       add,
