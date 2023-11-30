@@ -10,10 +10,8 @@ import java.util.List;
 
 @Service
 public class TestService {
-
     @Autowired
     private TestMapper testMapper;
-
     public List<Test> list(){
         return testMapper.list();
     }

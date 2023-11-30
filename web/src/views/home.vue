@@ -1,7 +1,5 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <a-layout>
-  <a-layout-content style="padding: 0 50px">
-    <a-layout style="padding: 24px 0; background: #fff">
       <a-layout-sider width="200" style="background: #fff">
         <a-menu
             mode="inline"
@@ -9,10 +7,8 @@
             @click = "handleClick"
         >
           <a-menu-item key = "welcome">
-            <router-link :to="'/'">
               <MailOutlined/>
               <span>欢迎</span>
-            </router-link>
           </a-menu-item>
           <a-sub-menu v-for="item in level1" :key ="item.id">
             <template v-slot:title>
@@ -24,29 +20,42 @@
           </a-sub-menu>
         </a-menu>
       </a-layout-sider>
-    </a-layout>
-  </a-layout-content>
-  <a-layout-content :style="{ background:'#fff',padding: '24px',margin:'0',minHeight:'280px'}">
-    <a-list item-layout="vertical" size="large" :grid="{ gutter: 20, column: 3 }" :data-source="ebooks">
+      <a-layout-content
+          :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
+      >
+    <div class="welcome" v-show="isShowWelcome">
+      <the-welcome></the-welcome>
+    </div>
+    <a-list v-show="!isShowWelcome" item-layout="vertical" size="large" :grid="{ gutter: 20, column: 3 }" :data-source="ebooks">
       <template #renderItem="{ item }">
         <a-list-item key="item.name">
           <template #actions>
-                  <span v-for="{ icon, text } in actions" :key="icon">
-                    <component :is="icon" style="margin-right: 8px" />
-                    {{ text }}
-                  </span>
+              <span>
+                <component v-bind:is="'FileOutlined'" style="margin-right: 8px" />
+                {{ item.docCount }}
+              </span>
+            <span>
+                <component v-bind:is="'UserOutlined'" style="margin-right: 8px" />
+                {{ item.viewCount }}
+              </span>
+            <span>
+                <component v-bind:is="'LikeOutlined'" style="margin-right: 8px" />
+                {{ item.voteCount }}
+              </span>
           </template>
           <a-list-item-meta :description="item.description">
             <template #title>
-              <a :href="item.href">{{ item.name }}</a>
+              <router-link :to="'/doc?ebookId=' + item.id">
+                {{ item.name }}
+              </router-link>
             </template>
-            <template #avatar><a-avatar :src="item.cover" /></template>
+            <template #avatar><a-avatar :src="item.cover"/></template>
           </a-list-item-meta>
         </a-list-item>
       </template>
     </a-list>
-  </a-layout-content>
-  </a-layout>
+      </a-layout-content>
+    </a-layout>
 </template>
 
 <script lang="ts" >
@@ -99,9 +108,18 @@ export default  defineComponent({
         }
       });
     };
-    const handleClick = () =>{
-      console.log("menu click")
-    }
+    const isShowWelcome = ref(true)
+    const handleClick = (value: any) => {
+      // console.log("menu click", value)
+      if (value.key === 'welcome') {
+        isShowWelcome.value = true;
+      } else {
+        // categoryId2 = value.key;
+        isShowWelcome.value = false;
+        // handleQueryEbook();
+      }
+      // isShowWelcome.value = value.key === 'welcome';
+    };
 
     onMounted(()=>{
       handleQueryCategory();
@@ -131,7 +149,8 @@ export default  defineComponent({
         { type: 'MessageOutlined', text: '2' },
       ],
       handleClick,
-      level1
+      level1,
+      isShowWelcome
     }
   }
 });

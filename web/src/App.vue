@@ -6,7 +6,7 @@
   </a-layout>
 </template>
 <script lang="ts" >
-import {defineComponent, ref} from 'vue';
+import {defineComponent} from 'vue';
 import theHeader from "@/components/the-header.vue";
 import theFooter from "@/components/the-footer.vue";
 export default  defineComponent({
