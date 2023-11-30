@@ -41,6 +41,9 @@ public class    EbookService {
         if(!ObjectUtils.isEmpty(req.getName())){
         criteria.andNameLike("%" + req.getName() + "%");
         }
+        if(!ObjectUtils.isEmpty(req.getCategoryId2())){
+            criteria.andCategory2IdEqualTo( + req.getCategoryId2());
+        }
         // 打印日志
         // 这个pageHelper只对遇到的第一个sql语句 有作用
         PageHelper.startPage(req.getPage(),req.getSize());
