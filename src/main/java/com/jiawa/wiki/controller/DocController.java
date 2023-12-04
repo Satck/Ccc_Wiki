@@ -20,10 +20,10 @@ public class DocController {
     @Autowired
     private DocService docService;
 
-    @GetMapping("/all")
-    public CommonResp all(){  // 加上@Valid 表明这组数据要开启校验
+    @GetMapping("/all/{ebookId}")
+    public CommonResp all(@PathVariable Long ebookId){  // 加上@Valid 表明这组数据要开启校验
         CommonResp<List<DocQueryResp>> resp = new CommonResp<>();
-        List<DocQueryResp> list = docService.all();
+        List<DocQueryResp> list = docService.all(ebookId);
         resp.setContent(list);
         return resp;
     }

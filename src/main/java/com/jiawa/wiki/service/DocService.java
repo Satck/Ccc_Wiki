@@ -36,8 +36,9 @@ public class DocService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DocService.class);
 
-    public List<DocQueryResp> all(){
+    public List<DocQueryResp> all(Long ebookId){
         DocExample docExample = new DocExample();
+        docExample.createCriteria().andEbookIdEqualTo(ebookId);
         docExample.setOrderByClause("sort asc");
         List<Doc> docList = docMapper.selectByExample(docExample);
 
@@ -118,8 +119,13 @@ public class DocService {
     }
     public String  findContent(Long id){
         Content content = contentMapper.selectByPrimaryKey(id);
-        return content.getContent();
+
         //一般去使用getContent（） 的时候要去判断一下是不是空的
+        if(ObjectUtils.isEmpty(content)){
+            return "";
+        }else{
+            return content.getContent();
+        }
 
     }
 }
