@@ -10,8 +10,34 @@ public class DocSaveReq {
     private Long parent;
     @NotNull(message = "【名称】不能为空")
     private String name;
+
+    @Override
+    public String toString() {
+        return "DocSaveReq{" +
+                "id=" + id +
+                ", ebookId=" + ebookId +
+                ", parent=" + parent +
+                ", name='" + name + '\'' +
+                ", sort=" + sort +
+                ", comment=" + comment +
+                ", viewCount=" + viewCount +
+                ", voteCount=" + voteCount +
+                '}';
+    }
+
+    public Integer getComment() {
+        return comment;
+    }
+
+    public void setComment(Integer comment) {
+        this.comment = comment;
+    }
+
     @NotNull(message = "【排序】不能为空")
     private Integer sort;
+
+    @NotNull(message = "【内容】不能为空")
+    private Integer comment;
 
     private Integer viewCount;
 
@@ -73,20 +99,4 @@ public class DocSaveReq {
         this.voteCount = voteCount;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", ebookId=").append(ebookId);
-        sb.append(", parent=").append(parent);
-        sb.append(", name=").append(name);
-        sb.append(", sort=").append(sort);
-        sb.append(", viewCount=").append(viewCount);
-        sb.append(", voteCount=").append(voteCount);
-        sb.append("]");
-        return sb.toString();
-    }
 }

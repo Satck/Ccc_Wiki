@@ -3,8 +3,10 @@ package com.jiawa.wiki.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jiawa.wiki.domain.Content;
 import com.jiawa.wiki.domain.Doc;
 import com.jiawa.wiki.domain.DocExample;
+import com.jiawa.wiki.mapper.ContentMapper;
 import com.jiawa.wiki.mapper.DocMapper;
 import com.jiawa.wiki.req.DocQueryReq;
 import com.jiawa.wiki.req.DocSaveReq;
@@ -26,7 +28,8 @@ public class DocService {
     @Autowired
     private DocMapper docMapper;
 
-
+    @Autowired
+    private ContentMapper contentMapper;
 
     @Autowired
     private SnowFlake snowFlake;
@@ -48,16 +51,23 @@ public class DocService {
 
     public void save (DocSaveReq req){
         Doc doc  = CopyUtil.copy(req,Doc.class);
+        Content content = CopyUtil.copy(req, Content.class);
         // 根据id判断是新增还是更新
         if(ObjectUtils.isEmpty(req.getId())){
             // 新增
-
             // 生成id  id的算法 一种最简单的自增 还有一种是uuid  再就是雪花算法
             doc.setId(snowFlake.nextId());
             docMapper.insert(doc);
+
+            content.setId(doc.getId());
+            contentMapper.insert(content);
         }else{
             // 更新
             docMapper.updateByPrimaryKey(doc);
+            int count = contentMapper.updateByPrimaryKeyWithBLOBs(content);
+            if(count==0 ){
+                contentMapper.insert(content);
+            }
         }
     }
 

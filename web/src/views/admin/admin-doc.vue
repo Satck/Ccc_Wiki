@@ -1,7 +1,7 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <a-layout>
     <a-layout-content :style="{ background:'#fff',padding: '24px',margin:'0',minHeight:'280px'}">
-      a-row :gutter="24">
+      <a-row :gutter="24"/>
       <a-col :span="8">
         <p>
           <a-form layout="inline" :model="param">
@@ -94,7 +94,7 @@
       title="文档表单"
       v-model:visible="modalVisible"
       :confirm-loading="modalLoading"
-      @ok="handleModalOk"
+      @ok="handleSave"
   >
     <a-form :model="doc" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
       <a-form-item label="名称">
@@ -116,7 +116,7 @@
         <a-input v-model:value="doc.sort" />
       </a-form-item>
       <a-form-item label="内容">
-        <div id="content"></div>
+        <div id="#content"></div>
       </a-form-item>
     </a-form>
   </a-modal>
@@ -188,7 +188,8 @@ export default defineComponent({
     // 因为树选择组建的属性状态 会随着当前编辑的节点而变化 所以单独声明一个响应式变量
     const treeSelectData = ref();
     treeSelectData.value = [];
-    const doc = ref({});
+    const doc = ref();
+    doc.value={};
     const editor = new E('#cotent');
     editor.config.zIndex=0
     const modalVisible = ref(false);
@@ -196,6 +197,7 @@ export default defineComponent({
 
     const handleSave = () => {
       modalLoading.value = true ;
+      doc.value.content = editor.txt.html();
       axios.post("/doc/save", doc.value).then((response) => {
         modalLoading.value = false  // 只要后端的结果有返回 就可以将Loading的效果去掉
         const data = response.data; // data=commonResp
@@ -250,9 +252,6 @@ export default defineComponent({
           handleQuery();
         }
       });
-      setTimeout(function (){
-        editor.create();
-      },100)
     };
 
     /**
