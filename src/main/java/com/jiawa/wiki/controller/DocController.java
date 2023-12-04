@@ -49,8 +49,16 @@ public class DocController {
     @DeleteMapping("/delete/{idsStr}")
     public CommonResp delete(@PathVariable String idsStr ) {   //这样的话 Long类型的id 会自动映射 路径中的id属性
         CommonResp resp = new CommonResp<>();
-        List<String> list = Arrays.asList(idsStr.split(","));
-        docService.delete(list );
+        List<String> content = Arrays.asList(idsStr.split(","));
+        docService.delete(content );
+        return resp;
+    }
+
+    @GetMapping("/find-content/{id}")
+    public CommonResp findContent(@PathVariable Long id){  // 加上@Valid 表明这组数据要开启校验
+        CommonResp<String> resp = new CommonResp<>();
+        String content  = docService.findContent(id);
+        resp.setContent(content);
         return resp;
     }
 

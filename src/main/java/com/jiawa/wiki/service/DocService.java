@@ -116,4 +116,10 @@ public class DocService {
         pageResp.setList(list);
         return   pageResp;
     }
+    public String  findContent(Long id){
+        Content content = contentMapper.selectByPrimaryKey(id);
+        return content.getContent();
+        //一般去使用getContent（） 的时候要去判断一下是不是空的
+
+    }
 }
