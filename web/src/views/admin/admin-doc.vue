@@ -70,6 +70,9 @@
       <a-form-item label="顺序">
         <a-input v-model:value="doc.sort" />
       </a-form-item>
+      <a-form-item label="内容">
+        <div id="content"></div>
+      </a-form-item>
     </a-form>
   </a-modal>
 </template>
@@ -79,6 +82,7 @@ import axios from 'axios';
 import {message} from "ant-design-vue";
 import { Tool } from '@/util/tool';
 import {useRoute} from "vue-router";
+import E from 'wangeditor'
 
 export default defineComponent({
   name: 'AdminDoc',
@@ -153,6 +157,8 @@ export default defineComponent({
     const treeSelectData = ref();
     treeSelectData.value = [];
     const doc = ref({});
+    const editor = new E('#cotent');
+    editor.create()
     const modalVisible = ref(false);
     const modalLoading = ref(false);
     const handleModalOk = () => {
@@ -182,6 +188,9 @@ export default defineComponent({
 
       // 为选择树 添加一个”无“
       treeSelectData.value.unshift({id:0,name:'无'});
+      setTimeout(function (){
+        editor.create();
+      },100)
     };
     /**
      * 新增
@@ -196,9 +205,16 @@ export default defineComponent({
 
       // 为选择树添加一个”无“
       treeSelectData.value.unshift({id:0,name:'无'});
+      setTimeout(function (){
+        editor.create();
+      },100)
     };
 
     const handleDelete=(id : number) => {
+      // console.log(level1, level1.value, id)
+      // 清空数组，否则多次删除时，数组会一直增加
+      deleteIds.length = 0;
+      deleteNames.length = 0;
       getDeleteIds(level1.value,id);
       axios.delete("/doc/delete/" + deleteIds.join(",")).then((response) => {
         const data = response.data; // data=commonResp
@@ -207,6 +223,9 @@ export default defineComponent({
           handleQuery();
         }
       });
+      setTimeout(function (){
+        editor.create();
+      },100)
     };
 
     /**
