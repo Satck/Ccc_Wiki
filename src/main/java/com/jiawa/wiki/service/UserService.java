@@ -83,7 +83,10 @@ public class UserService {
                 throw new BusinessException(BusinessExceptionCode.USER_LOGIN_NAME_EXIST);
             }
         }else{
-            userMapper.updateByPrimaryKey(user);
+            // 更新
+            user.setLoginName(null);
+            userMapper.updateByPrimaryKeySelective(user);
+            // 这个是指user里面有值 采取更新 没有不更新
         }
     }
 
