@@ -8,6 +8,7 @@ import com.jiawa.wiki.domain.Doc;
 import com.jiawa.wiki.domain.DocExample;
 import com.jiawa.wiki.mapper.ContentMapper;
 import com.jiawa.wiki.mapper.DocMapper;
+import com.jiawa.wiki.mapper.DocMapperCust;
 import com.jiawa.wiki.req.DocQueryReq;
 import com.jiawa.wiki.req.DocSaveReq;
 import com.jiawa.wiki.resp.DocQueryResp;
@@ -24,6 +25,9 @@ import java.util.List;
 
 @Service
 public class DocService {
+
+    @Autowired
+    private DocMapperCust docMapperCust;
 
     @Autowired
     private DocMapper docMapper;
@@ -58,6 +62,8 @@ public class DocService {
             // 新增
             // 生成id  id的算法 一种最简单的自增 还有一种是uuid  再就是雪花算法
             doc.setId(snowFlake.nextId());
+            doc.setViewCount(0);
+            doc.setVoteCount(0);
             docMapper.insert(doc);
 
             content.setId(doc.getId());
@@ -117,8 +123,12 @@ public class DocService {
         pageResp.setList(list);
         return   pageResp;
     }
+
+
     public String  findContent(Long id){
         Content content = contentMapper.selectByPrimaryKey(id);
+        // 文档阅读数+1
+        docMapperCust.increaseViewCount(id);
 
         //一般去使用getContent（） 的时候要去判断一下是不是空的
         if(ObjectUtils.isEmpty(content)){
