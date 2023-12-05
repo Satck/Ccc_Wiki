@@ -19,6 +19,7 @@ import com.jiawa.wiki.util.CopyUtil;
 import com.jiawa.wiki.util.RedisUtil;
 import com.jiawa.wiki.util.RequestContext;
 import com.jiawa.wiki.util.SnowFlake;
+import com.jiawa.wiki.websocket.WebSocketServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ import java.util.List;
 
 @Service
 public class DocService {
+
+    @Autowired
+    public WebSocketServer webSocketServer;
 
     @Autowired
     private DocMapperCust docMapperCust;
@@ -157,6 +161,9 @@ public class DocService {
             }else{
                 throw new BusinessException(BusinessExceptionCode.VOTE_REPEAT);
             }
+            // 推送消息
+            Doc docDb = docMapper.selectByPrimaryKey(id);
+            webSocketServer.sendInfo(docDb.getName()+"被点赞!");
         }
 
         public void updateEbookInfo(){
