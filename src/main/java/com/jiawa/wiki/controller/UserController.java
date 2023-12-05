@@ -1,6 +1,6 @@
 package com.jiawa.wiki.controller;
 
-import com.jiawa.wiki.domain.User;
+import com.alibaba.fastjson.JSONObject;
 import com.jiawa.wiki.req.UserLoginReq;
 import com.jiawa.wiki.req.UserQueryReq;
 import com.jiawa.wiki.req.UserResetPasswordReq;
@@ -10,18 +10,31 @@ import com.jiawa.wiki.resp.PageResp;
 import com.jiawa.wiki.resp.UserLoginResp;
 import com.jiawa.wiki.resp.UserQueryResp;
 import com.jiawa.wiki.service.UserService;
+import com.jiawa.wiki.util.SnowFlake;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.concurrent.TimeUnit;
 
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
+    private  static final Logger LOG = LoggerFactory.getLogger(UserController.class);
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    @Autowired
+    private SnowFlake snowFlake;
 
     @GetMapping("/list")
     public CommonResp list(@Valid UserQueryReq req){  // 加上@Valid 表明这组数据要开启校验
@@ -66,6 +79,13 @@ public class UserController {
         // 通过这句话 使我们的密码变成了一个32位的16进制的字符串
         CommonResp<UserLoginResp> resp = new CommonResp<>();
         UserLoginResp userLoginResp = userService.login(req);
+        // 生成单点登录token，并且放入redis中
+        Long  token = snowFlake.nextId();
+        LOG.info("生成单点登录token，并且放入redis中",token);
+        userLoginResp.setToken(token.toString());
+        redisTemplate.opsForValue().set(token, JSONObject.toJSONString(userLoginResp),3600*24, TimeUnit.SECONDS);
+
+
         resp.setContent(userLoginResp);
         return resp;
     }
