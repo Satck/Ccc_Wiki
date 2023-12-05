@@ -125,17 +125,25 @@ public class DocService {
     }
 
 
-    public String  findContent(Long id){
+    public String  findContent(Long id) {
         Content content = contentMapper.selectByPrimaryKey(id);
         // 文档阅读数+1
         docMapperCust.increaseViewCount(id);
 
         //一般去使用getContent（） 的时候要去判断一下是不是空的
-        if(ObjectUtils.isEmpty(content)){
+        if (ObjectUtils.isEmpty(content)) {
             return "";
-        }else{
+        } else {
             return content.getContent();
         }
-
     }
+
+        /*
+        点赞
+         */
+        public void vote(Long id){
+            docMapperCust.increaseViewCount(id);
+        }
+
+
 }
