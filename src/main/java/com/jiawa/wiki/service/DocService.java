@@ -159,6 +159,10 @@ public class DocService {
             }
         }
 
+        public void updateEbookInfo(){
+            docMapperCust.updateEbookInfo();
+        }
+
 
 
 }
