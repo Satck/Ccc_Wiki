@@ -1,6 +1,6 @@
 <template>
   <a-layout-footer style="text-align: center">
-    Ant Design ©2018 Created by Ant UED
+     Design ©2023 Created by ChengQi
   </a-layout-footer>
 </template>
 

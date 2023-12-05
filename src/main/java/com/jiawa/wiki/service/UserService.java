@@ -5,6 +5,8 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jiawa.wiki.domain.User;
 import com.jiawa.wiki.domain.UserExample;
+import com.jiawa.wiki.exception.BusinessException;
+import com.jiawa.wiki.exception.BusinessExceptionCode;
 import com.jiawa.wiki.mapper.UserMapper;
 import com.jiawa.wiki.req.UserQueryReq;
 import com.jiawa.wiki.req.UserSaveReq;
@@ -16,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import java.util.List;
@@ -70,26 +73,36 @@ public class UserService {
 
     public void save (UserSaveReq req){
         User user  = CopyUtil.copy(req,User.class);
-        // 根据id判断是新增还是更新
         if(ObjectUtils.isEmpty(req.getId())){
-            // 新增
-
-            // 生成id  id的算法 一种最简单的自增 还有一种是uuid  再就是雪花算法
-            user.setId(snowFlake.nextId());
-            userMapper.insert(user);
+            User userDB = selectByLoginName(req.getLoginName());
+            if(ObjectUtils.isEmpty(userDB)){
+                user.setId(snowFlake.nextId());
+                userMapper.insert(user);
+            }else {
+                // 用户名已经存在
+                throw new BusinessException(BusinessExceptionCode.USER_LOGIN_NAME_EXIST);
+            }
         }else{
-            // 更新
             userMapper.updateByPrimaryKey(user);
         }
     }
-
 
     /***
      *
      * 删除
      */
-
     public void delete(Long id){
         userMapper.deleteByPrimaryKey(id);
+    }
+    public User selectByLoginName(String LoginName){
+        UserExample userExample = new UserExample();
+        UserExample.Criteria criteria = userExample.createCriteria();
+        criteria.andLoginNameEqualTo(LoginName);
+        List<User> userList = userMapper.selectByExample(userExample);
+        if(CollectionUtils.isEmpty(userList)){
+            return null;
+        }else{
+            return userList.get(0);
+        }
     }
 }
