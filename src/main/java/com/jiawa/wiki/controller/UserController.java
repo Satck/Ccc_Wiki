@@ -7,6 +7,7 @@ import com.jiawa.wiki.resp.UserQueryResp;
 import com.jiawa.wiki.resp.PageResp;
 import com.jiawa.wiki.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -31,6 +32,8 @@ public class UserController {
     // 如果是使用form表单的形式去提交的话 就不需要用RequestBody
     @PostMapping("/save")
     public CommonResp save(@Valid @RequestBody UserSaveReq req) {
+        req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
+        // 通过这句话 使我们的密码变成了一个32位的16进制的字符串
         CommonResp resp = new CommonResp<>();
         userService.save(req);
         return resp;
