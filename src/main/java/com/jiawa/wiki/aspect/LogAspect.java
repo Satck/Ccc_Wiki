@@ -1,6 +1,5 @@
 package com.jiawa.wiki.aspect;
 
-
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.support.spring.PropertyPreFilters;
 import com.jiawa.wiki.util.RequestContext;
@@ -56,13 +55,11 @@ public class LogAspect {
         LOG.info("类名方法: {}.{}", signature.getDeclaringTypeName(), name);
         LOG.info("远程地址: {}", request.getRemoteAddr());
 
-
-        // 获取远程ip并且放到线程本地变量
         RequestContext.setRemoteAddr(getRemoteIp(request));
 
         // 打印请求参数
         Object[] args = joinPoint.getArgs();
-         LOG.info("请求参数: {}", JSONObject.toJSONString(args));
+        // LOG.info("请求参数: {}", JSONObject.toJSONString(args));
 
         Object[] arguments  = new Object[args.length];
         for (int i = 0; i < args.length; i++) {
