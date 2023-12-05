@@ -56,6 +56,8 @@ public class LogAspect {
         LOG.info("类名方法: {}.{}", signature.getDeclaringTypeName(), name);
         LOG.info("远程地址: {}", request.getRemoteAddr());
 
+
+        // 获取远程ip并且放到线程本地变量
         RequestContext.setRemoteAddr(getRemoteIp(request));
 
         // 打印请求参数
