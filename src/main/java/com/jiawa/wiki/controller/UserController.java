@@ -90,4 +90,12 @@ public class UserController {
         return resp;
     }
 
+    @GetMapping("/logout/{token}")
+    public CommonResp logout(@PathVariable String token ) {   //这样的话 Long类型的id 会自动映射 路径中的id属性
+        CommonResp resp = new CommonResp<>();
+        redisTemplate.delete(token);
+        LOG.info("从redis中删除token：{}",token);
+        return resp;
+    }
+
 }
