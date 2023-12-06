@@ -86,7 +86,6 @@
   </a-modal>
 </template>
 
-
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue';
 import axios from 'axios';

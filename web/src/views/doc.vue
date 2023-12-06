@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref} from 'vue';
+import { defineComponent, onMounted, ref, createVNode } from 'vue';
 import axios from 'axios';
 import {message} from 'ant-design-vue';
 import {Tool} from "@/util/tool";
@@ -95,9 +95,7 @@ export default defineComponent({
           level1.value = Tool.array2Tree(docs.value, 0);
 
           if (Tool.isNotEmpty(level1)) {
-            //1  选中节点
             defaultSelectedKeys.value = [level1.value[0].id];
-            // 2 根据这个节点去检查内容
             handleQueryContent(level1.value[0].id);
             // 初始显示文档信息
             doc.value = level1.value[0];

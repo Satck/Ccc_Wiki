@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Home from '../views/home.vue'
 import About from '../views/about.vue'
-// import Aliyun from '../views/aliyun.vue'
+import Aliyun from '../views/aliyun.vue'
 import Doc from '../views/doc.vue'
 import AdminUser from '../views/admin/admin-user.vue'
 import AdminEbook from '../views/admin/admin-ebook.vue'
@@ -30,11 +30,11 @@ const routes: Array<RouteRecordRaw> = [
     // which is lazy-loaded when the route is visited.
     // component: () => import(/* webpackChunkName: "about" */ '../views/about.vue')
   },
-  // {
-  //   path: '/aliyun',
-  //   name: 'Aliyun',
-  //   component: Aliyun
-  // },
+  {
+    path: '/aliyun',
+    name: 'Aliyun',
+    component: Aliyun
+  },
   {
     path: '/admin/user',
     name: 'AdminUser',
@@ -77,7 +77,6 @@ const router = createRouter({
 // 路由登录拦截
 router.beforeEach((to, from, next) => {
   // 要不要对meta.loginRequire属性做监控拦截
-  // item就是路由
   if (to.matched.some(function (item) {
     console.log(item, "是否需要登录校验：", item.meta.loginRequire);
     return item.meta.loginRequire
