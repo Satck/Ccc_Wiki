@@ -1,5 +1,5 @@
 <template>
-  <a-layout>
+  <a-layout class="container" >
     <a-layout-sider width="200" style="background: #fff">
       <a-menu
           mode="inline"
@@ -24,41 +24,43 @@
         </a-menu-item>
       </a-menu>
     </a-layout-sider>
-    <a-layout-content
-        :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
-    >
-      <div class="welcome" v-show="isShowWelcome">
-        <the-welcome></the-welcome>
-      </div>
-      <a-list v-show="!isShowWelcome" item-layout="vertical" size="large" :grid="{ gutter: 20, column: 3 }" :data-source="ebooks">
-        <template #renderItem="{ item }">
-          <a-list-item key="item.name">
-            <template #actions>
-              <span>
-                <component v-bind:is="'FileOutlined'" style="margin-right: 8px" />
-                {{ item.docCount }}
-              </span>
-              <span>
-                <component v-bind:is="'UserOutlined'" style="margin-right: 8px" />
-                {{ item.viewCount }}
-              </span>
-              <span>
-                <component v-bind:is="'LikeOutlined'" style="margin-right: 8px" />
-                {{ item.voteCount }}
-              </span>
-            </template>
-            <a-list-item-meta :description="item.description">
-              <template #title>
-                <router-link :to="'/doc?ebookId=' + item.id">
-                  {{ item.name }}
-                </router-link>
+    <a-layout >
+      <a-layout-content
+          :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px',width:'1500px'}"
+      >
+        <div class="welcome" v-show="isShowWelcome">
+          <the-welcome></the-welcome>
+        </div>
+        <a-list v-show="!isShowWelcome" item-layout="vertical" size="large" :grid="{ gutter: 20, column: 3 }" :data-source="ebooks">
+          <template #renderItem="{ item }">
+            <a-list-item key="item.name">
+              <template #actions>
+                <span>
+                  <component v-bind:is="'FileOutlined'" style="margin-right: 8px" />
+                  {{ item.docCount }}
+                </span>
+                <span>
+                  <component v-bind:is="'UserOutlined'" style="margin-right: 8px" />
+                  {{ item.viewCount }}
+                </span>
+                <span>
+                  <component v-bind:is="'LikeOutlined'" style="margin-right: 8px" />
+                  {{ item.voteCount }}
+                </span>
               </template>
-              <template #avatar><a-avatar :src="item.cover"/></template>
-            </a-list-item-meta>
-          </a-list-item>
-        </template>
-      </a-list>
-    </a-layout-content>
+              <a-list-item-meta :description="item.description">
+                <template #title>
+                  <router-link :to="'/doc?ebookId=' + item.id">
+                    {{ item.name }}
+                  </router-link>
+                </template>
+                <template #avatar><a-avatar :src="item.cover"/></template>
+              </a-list-item-meta>
+            </a-list-item>
+          </template>
+        </a-list>
+      </a-layout-content>
+    </a-layout>
   </a-layout>
 </template>
 
@@ -188,5 +190,8 @@ export default defineComponent({
   line-height: 50px;
   border-radius: 8%;
   margin: 5px 0;
+}
+.container  {
+  display: flex;
 }
 </style>
