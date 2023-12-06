@@ -55,7 +55,7 @@ public class DocService {
     public WsService wsService;
 
     // @Resource
-    // private RocketMQTemplate rocketMQTemplate;
+    // private RocketMQTemplate rocketMQTemplate;   使用mq解耦点赞通知功能
 
     private static final Logger LOG = LoggerFactory.getLogger(DocService.class);
 
