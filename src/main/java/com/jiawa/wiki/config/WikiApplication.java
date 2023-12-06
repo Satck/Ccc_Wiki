@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 
@@ -15,6 +16,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @MapperScan("com.jiawa.wiki.mapper")
 @EnableScheduling
 //EnableScheduling 定时执行装置
+@EnableAsync
+// 采用异步化
 public class WikiApplication {
     private static  final  Logger LOG  = LoggerFactory.getLogger(WikiApplication.class);
     public static void main(String[] args) {

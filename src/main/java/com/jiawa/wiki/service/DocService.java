@@ -23,6 +23,7 @@ import com.jiawa.wiki.websocket.WebSocketServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -48,6 +49,12 @@ public class DocService {
 
     @Autowired
     public RedisUtil redisUtil;
+
+    @Autowired
+    public WsService wsService;
+
+    // @Resource
+    // private RocketMQTemplate rocketMQTemplate;
 
     private static final Logger LOG = LoggerFactory.getLogger(DocService.class);
 
@@ -161,9 +168,11 @@ public class DocService {
             }else{
                 throw new BusinessException(BusinessExceptionCode.VOTE_REPEAT);
             }
-            // 推送消息
+            // 推送消息4
             Doc docDb = docMapper.selectByPrimaryKey(id);
-            webSocketServer.sendInfo(docDb.getName()+"被点赞!");
+            String logId = MDC.get("LOG_ID");
+            wsService.sendInfo("【" + docDb.getName() + "】被点赞！", logId);
+            // rocketMQTemplate.convertAndSend("VOTE_TOPIC", "【" + docDb.getName() + "】被点赞！");
         }
 
         public void updateEbookInfo(){
